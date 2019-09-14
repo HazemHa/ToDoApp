@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
-class ShareableController extends Controller
+use App\Task;
+class TaskController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -36,22 +36,16 @@ class ShareableController extends Controller
     {
         //
         $validator = Validator::make($request->all(), [
-            'note' => 'required',
-            'from' => 'required',
-            'shareable_user_id' => 'required'
+            'content' => 'required'
         ]);
         if ($validator->fails()) {
             return response()->json($validator->messages(), 200);
         }
 
+        $newRecord = Note::create($request->all());
 
-        $newRecord = new Shareable;
-        $newRecord->note = $request->note;
-        $newRecord->from = $request->from;
-        $newRecord->shareable_user_id = $request->shareable_user_id;
-        $result =  $newRecord->save();
 
-        return $this->createResponseMessage($result);
+        return $this->createResponseMessage($newRecord);
     }
 
     /**
@@ -86,27 +80,24 @@ class ShareableController extends Controller
     public function update(Request $request, $id)
     {
         //
-
         $validator = Validator::make($request->all(), [
-            'note' => 'required',
-            'from' => 'required',
-            'shareable_user_id' => 'required'
+            'content' => 'required'
         ]);
         if ($validator->fails()) {
             return response()->json($validator->messages(), 200);
         }
 
 
-        $UpdatedRecord = Shareable::find($id);
-        $UpdatedRecord->note = $request->note;
-        $UpdatedRecord->from = $request->from;
-        $UpdatedRecord->shareable_user_id = $request->shareable_user_id;
+        $UpdatedRecord = Note::find($id);
+        $UpdatedRecord->content = $request->content;
+        $UpdatedRecord->isDone = $request->isDone;
 
 
         $result = $UpdatedRecord->update($request->all());
         $result = $UpdatedRecord->save();
 
         return $this->createResponseMessage($result);
+
     }
 
     /**
@@ -119,10 +110,10 @@ class ShareableController extends Controller
     {
         //
         try {
-            $record = Shareable::findOrFail($id);
-            $result =  Shareable::destroy($record->id);
+            $record = Note::findOrFail($id);
+            $result =  Note::destroy($record->id);
         } catch (ModelNotFoundException $e) {
-            return ['error' => 'the Shareable ($id) not found '];
+            return ['error' => 'the Task ($id) not found '];
         }
 
         return $this->createResponseMessage($result);
