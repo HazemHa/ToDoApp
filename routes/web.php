@@ -16,7 +16,7 @@ Route::get('/', function () {
 });
 
 Route::resources([
-    '/Note' => 'TaskController'
+    '/Task' => 'TaskController'
 ]);
 
 Route::resources([
