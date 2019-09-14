@@ -13,19 +13,18 @@
         </thead>
         <tbody>
 
-          <tr v-for="task in tasks" :key="task.id">
+          <tr v-for="task in arrayOfTask" :key="task.id">
             <th scope="row">{{task.id}}</th>
             <td>{{task.content}}</td>
             <td>
               <button type="button" class="btn btn-success" @click="updateTask(task.id)">Edit</button>
             <button type="button" class="btn btn-danger" @click="deleteTask(task.id)">Delete</button>
-            <button type="button" class="btn btn-success" @click="saveTask(task.id)">Complete</button>
             </td>
-            <td><input type="checkbox" :checked="task.isDone" name="isDone"></td>
+            <td><input type="checkbox" v-model="checked" name="isDone" @change="isChange(task.id,task.isDone)"></td>
 
 
           </tr>
-
+{{checked}}
         </tbody>
       </table>
     </div>
@@ -33,15 +32,20 @@
 </div>
 </template>
 <script>
+import axios from 'axios';
+
 export default {
-    props:[],
+    props:['tasks'],
     data() {
         return {
-           tasks:[],
+            arrayOfTask: null,
+            websiteURL:"http://127.0.0.1:8000",
+            checked:false,
         }
     },
     created() {
-
+        this.arrayOfTask = JSON.parse(this.tasks);
+        console.log(this.arrayOfTask);
     },
     mounted() {
 
@@ -52,15 +56,60 @@ export default {
     methods: {
         saveTask(id){
 
+  axios.post(`${this.websiteURL}/task`, {
+      content: this.postBody,
+      check:false
+    })
+    .then(response => {})
+    .catch(e => {
+      this.errors.push(e)
+    })
+
         },
         updateTask(id){
+             axios.put(`${this.websiteURL}/task/${id}`, {
+      content: this.contentTask
+    })
+    .then(response => {})
+    .catch(e => {
+      this.errors.push(e)
+    })
+
+
 
         },
         deleteTask(id){
 
+             axios.delete(`${this.websiteURL}/task/${id}`)
+    .then(response => {})
+    .catch(e => {
+      this.errors.push(e)
+    })
+
+
         },
         refreshTasks(){
 
+            axios.get(`${this.websiteURL}/task`)
+    .then(response => {
+      // JSON responses are automatically parsed.
+      this.posts = response.data
+    })
+    .catch(e => {
+      this.errors.push(e)
+    })
+
+
+        },
+        isChange(id,isDone){
+                axios.put(`${this.websiteURL}/task/${id}`, {
+      isDone: this.checked,
+      check:true
+    })
+    .then(response => {})
+    .catch(e => {
+      this.errors.push(e)
+    })
         }
     },
 }

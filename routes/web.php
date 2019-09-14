@@ -16,8 +16,11 @@ Route::get('/', function () {
 });
 
 Route::resources([
-    '/Task' => 'TaskController'
+    '/task' => 'TaskController'
 ]);
+
+
+
 
 Route::resources([
     '/Shareable' => 'ShareableController'

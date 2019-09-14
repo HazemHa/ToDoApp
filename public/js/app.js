@@ -1838,6 +1838,8 @@ module.exports = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 //
 //
 //
@@ -1871,22 +1873,69 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
+
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: [],
+  props: ['tasks'],
   data: function data() {
     return {
-      tasks: []
+      arrayOfTask: null,
+      websiteURL: "http://127.0.0.1:8000",
+      checked: false
     };
   },
-  created: function created() {},
+  created: function created() {
+    this.arrayOfTask = JSON.parse(this.tasks);
+    console.log(this.arrayOfTask);
+  },
   mounted: function mounted() {},
   destroyed: function destroyed() {},
   methods: {
-    saveTask: function saveTask(id) {},
-    updateTask: function updateTask(id) {},
-    deleteTask: function deleteTask(id) {},
-    refreshTasks: function refreshTasks() {}
+    saveTask: function saveTask(id) {
+      var _this = this;
+
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("".concat(this.websiteURL, "/task"), {
+        content: this.postBody,
+        check: false
+      }).then(function (response) {})["catch"](function (e) {
+        _this.errors.push(e);
+      });
+    },
+    updateTask: function updateTask(id) {
+      var _this2 = this;
+
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("".concat(this.websiteURL, "/task/").concat(id), {
+        content: this.contentTask
+      }).then(function (response) {})["catch"](function (e) {
+        _this2.errors.push(e);
+      });
+    },
+    deleteTask: function deleteTask(id) {
+      var _this3 = this;
+
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"]("".concat(this.websiteURL, "/task/").concat(id)).then(function (response) {})["catch"](function (e) {
+        _this3.errors.push(e);
+      });
+    },
+    refreshTasks: function refreshTasks() {
+      var _this4 = this;
+
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("".concat(this.websiteURL, "/task")).then(function (response) {
+        // JSON responses are automatically parsed.
+        _this4.posts = response.data;
+      })["catch"](function (e) {
+        _this4.errors.push(e);
+      });
+    },
+    isChange: function isChange(id, isDone) {
+      var _this5 = this;
+
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("".concat(this.websiteURL, "/task/").concat(id), {
+        isDone: this.checked,
+        check: true
+      }).then(function (response) {})["catch"](function (e) {
+        _this5.errors.push(e);
+      });
+    }
   }
 });
 
@@ -20245,67 +20294,94 @@ var render = function() {
           _vm._v(" "),
           _c(
             "tbody",
-            _vm._l(_vm.tasks, function(task) {
-              return _c("tr", { key: task.id }, [
-                _c("th", { attrs: { scope: "row" } }, [
-                  _vm._v(_vm._s(task.id))
-                ]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(task.content))]),
-                _vm._v(" "),
-                _c("td", [
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-success",
-                      attrs: { type: "button" },
-                      on: {
-                        click: function($event) {
-                          return _vm.updateTask(task.id)
-                        }
-                      }
-                    },
-                    [_vm._v("Edit")]
-                  ),
+            [
+              _vm._l(_vm.arrayOfTask, function(task) {
+                return _c("tr", { key: task.id }, [
+                  _c("th", { attrs: { scope: "row" } }, [
+                    _vm._v(_vm._s(task.id))
+                  ]),
                   _vm._v(" "),
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-danger",
-                      attrs: { type: "button" },
-                      on: {
-                        click: function($event) {
-                          return _vm.deleteTask(task.id)
-                        }
-                      }
-                    },
-                    [_vm._v("Delete")]
-                  ),
+                  _c("td", [_vm._v(_vm._s(task.content))]),
                   _vm._v(" "),
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-success",
-                      attrs: { type: "button" },
-                      on: {
-                        click: function($event) {
-                          return _vm.saveTask(task.id)
+                  _c("td", [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-success",
+                        attrs: { type: "button" },
+                        on: {
+                          click: function($event) {
+                            return _vm.updateTask(task.id)
+                          }
                         }
+                      },
+                      [_vm._v("Edit")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-danger",
+                        attrs: { type: "button" },
+                        on: {
+                          click: function($event) {
+                            return _vm.deleteTask(task.id)
+                          }
+                        }
+                      },
+                      [_vm._v("Delete")]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.checked,
+                          expression: "checked"
+                        }
+                      ],
+                      attrs: { type: "checkbox", name: "isDone" },
+                      domProps: {
+                        checked: Array.isArray(_vm.checked)
+                          ? _vm._i(_vm.checked, null) > -1
+                          : _vm.checked
+                      },
+                      on: {
+                        change: [
+                          function($event) {
+                            var $$a = _vm.checked,
+                              $$el = $event.target,
+                              $$c = $$el.checked ? true : false
+                            if (Array.isArray($$a)) {
+                              var $$v = null,
+                                $$i = _vm._i($$a, $$v)
+                              if ($$el.checked) {
+                                $$i < 0 && (_vm.checked = $$a.concat([$$v]))
+                              } else {
+                                $$i > -1 &&
+                                  (_vm.checked = $$a
+                                    .slice(0, $$i)
+                                    .concat($$a.slice($$i + 1)))
+                              }
+                            } else {
+                              _vm.checked = $$c
+                            }
+                          },
+                          function($event) {
+                            return _vm.isChange(task.id, task.isDone)
+                          }
+                        ]
                       }
-                    },
-                    [_vm._v("Complete")]
-                  )
-                ]),
-                _vm._v(" "),
-                _c("td", [
-                  _c("input", {
-                    attrs: { type: "checkbox", name: "isDone" },
-                    domProps: { checked: task.isDone }
-                  })
+                    })
+                  ])
                 ])
-              ])
-            }),
-            0
+              }),
+              _vm._v("\n" + _vm._s(_vm.checked) + "\n        ")
+            ],
+            2
           )
         ])
       ])

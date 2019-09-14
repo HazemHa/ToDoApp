@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Task;
+use Validator;
 class TaskController extends Controller
 {
     /**
@@ -19,7 +20,7 @@ class TaskController extends Controller
     {
         //
         // for test case
-        $tasks = \App\User::find(1)->myTasks()->get();
+        $tasks = \App\User::find(2)->myTasks()->get();
        // $myTasks = \Auth::user()->myTasks();
         return view('main')->with('data',$tasks);
     }
@@ -50,7 +51,7 @@ class TaskController extends Controller
             return response()->json($validator->messages(), 200);
         }
 
-        $newRecord = Note::create($request->all());
+        $newRecord = Task::create($request->all());
 
 
         return $this->createResponseMessage($newRecord);
@@ -87,6 +88,13 @@ class TaskController extends Controller
      */
     public function update(Request $request, $id)
     {
+        if($request->check){
+            $UpdatedRecord = Task::find($id);
+            $result = $UpdatedRecord->update($request->all());
+        return response()->json(['done'=> $result,'data'=>$request->all()],200);
+
+        return $this->createResponseMessage($result);
+        }
         //
         $validator = Validator::make($request->all(), [
             'content' => 'required'
@@ -96,7 +104,7 @@ class TaskController extends Controller
         }
 
 
-        $UpdatedRecord = Note::find($id);
+        $UpdatedRecord = Task::find($id);
         $UpdatedRecord->content = $request->content;
         $UpdatedRecord->isDone = $request->isDone;
 
@@ -118,12 +126,12 @@ class TaskController extends Controller
     {
         //
         try {
-            $record = Note::findOrFail($id);
-            $result =  Note::destroy($record->id);
+          //  $record = Task::findOrFail($id);
+         //   $result =  Task::destroy($record->id);
         } catch (ModelNotFoundException $e) {
             return ['error' => 'the Task ($id) not found '];
         }
 
-        return $this->createResponseMessage($result);
+       // return $this->createResponseMessage($result);
     }
 }
