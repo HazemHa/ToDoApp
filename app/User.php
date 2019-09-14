@@ -39,6 +39,6 @@ class User extends Authenticatable
 
     public function myTasks()
     {
-        return $this->belongsTo('App\User', 'user_id', 'id');
+        return $this->belongsTo('App\Task', 'user_id', 'id');
     }
 }

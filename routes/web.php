@@ -22,3 +22,7 @@ Route::resources([
 Route::resources([
     '/Shareable' => 'ShareableController'
 ]);
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

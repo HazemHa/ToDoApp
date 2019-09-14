@@ -8,21 +8,20 @@
             <th scope="col">Number</th>
             <th scope="col">Task</th>
             <th></th>
-                        <th scope="col">isDone</th>
-
+            <th scope="col">isDone</th>
           </tr>
         </thead>
         <tbody>
 
-          <tr>
-            <th scope="row">2</th>
-            <td>Cristina</td>
+          <tr v-for="task in tasks" :key="task.id">
+            <th scope="row">{{task.id}}</th>
+            <td>{{task.content}}</td>
             <td>
-              <button type="button" class="btn btn-success">Edit</button>
-            <button type="button" class="btn btn-danger">Delete</button>
-            <button type="button" class="btn btn-success">Complete</button>
+              <button type="button" class="btn btn-success" @click="updateTask(task.id)">Edit</button>
+            <button type="button" class="btn btn-danger" @click="deleteTask(task.id)">Delete</button>
+            <button type="button" class="btn btn-success" @click="saveTask(task.id)">Complete</button>
             </td>
-            <td><input type="checkbox" name="isDone"></td>
+            <td><input type="checkbox" :checked="task.isDone" name="isDone"></td>
 
 
           </tr>
@@ -38,7 +37,7 @@ export default {
     props:[],
     data() {
         return {
-
+           tasks:[],
         }
     },
     created() {
@@ -49,6 +48,20 @@ export default {
     },
     destroyed() {
 
+    },
+    methods: {
+        saveTask(id){
+
+        },
+        updateTask(id){
+
+        },
+        deleteTask(id){
+
+        },
+        refreshTasks(){
+
+        }
     },
 }
 </script>
@@ -61,9 +74,6 @@ h4 {
   margin: 2rem 0rem 1rem;
 }
 
-.table-image {
-
-}
  td, th {
     vertical-align: middle;
   }

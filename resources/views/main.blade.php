@@ -11,7 +11,6 @@
 <body>
 
     <div class="container-fluid" id="app">
-google
 <list-tasks></list-tasks>
 
       </div>

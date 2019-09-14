@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Task extends Model
 {
     //
-    protected $table = 'notes';
+    protected $table = 'task';
     protected $primaryKey  = 'id';
     protected $fillable = ['content', 'isDone'];
 }

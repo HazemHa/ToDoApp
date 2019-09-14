@@ -11,10 +11,17 @@ class TaskController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+//    /   $this->middleware('auth');
+    }
     public function index()
     {
         //
-        return view('main');
+        // for test case
+        $tasks = \App\User::find(1)->myTasks()->get();
+       // $myTasks = \Auth::user()->myTasks();
+        return view('main')->with('data',$tasks);
     }
 
     /**
