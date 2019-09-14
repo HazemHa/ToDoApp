@@ -33,7 +33,25 @@
   </div>
 </div>
 </template>
+<script>
+export default {
+    props:[],
+    data() {
+        return {
 
+        }
+    },
+    created() {
+
+    },
+    mounted() {
+
+    },
+    destroyed() {
+
+    },
+}
+</script>
 <style>
 .container {
   padding: 2rem 0rem;
