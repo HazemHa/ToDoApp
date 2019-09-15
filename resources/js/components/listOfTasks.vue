@@ -217,6 +217,10 @@ if (r == true) {
 
         })
         .catch(e => {
+            if(e.response.data.message){
+                this.$toaster.error(e.response.data.message);
+            }
+
           this.errors.push(e);
         });
 }

@@ -138,6 +138,9 @@ class TaskController extends Controller
         //
         try {
             $record = Task::findOrFail($id);
+            if($record->user_id != \Auth::user()->id){
+                return response()->json(['message'=>'unauthorize'],401);
+            }
             $result =  Task::destroy($record->id);
         } catch (ModelNotFoundException $e) {
             return ['error' => 'the Task ($id) not found '];
