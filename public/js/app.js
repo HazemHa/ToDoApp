@@ -1993,6 +1993,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["tasks"],
@@ -38172,6 +38174,8 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container" }, [
+    _c("h1", { staticClass: "display-4" }, [_vm._v("To Do App")]),
+    _vm._v(" "),
     _c("div", { staticClass: "row" }, [
       _vm._m(0),
       _vm._v(" "),

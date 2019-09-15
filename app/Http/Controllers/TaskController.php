@@ -16,17 +16,18 @@ class TaskController extends Controller
      */
     public function __construct()
     {
-//    /   $this->middleware('auth');
+  $this->middleware('auth');
     }
     public function index()
     {
+        /*
         //
         // for test case
-        $tasks = \App\User::find(2)->myTasks()->get();
+        $tasks =\Auth::user()->myTasks()->get();
     //    return $tasks;
         $shareableTask = \App\Shareable::all();
         $filtered = $shareableTask->filter(function ($value, $key) {
-            if($value->share_user_id != \App\User::find(2)->id){
+            if($value->share_user_id !=\Auth::user()->id){
                 return $value;
             }
         });
@@ -38,7 +39,8 @@ class TaskController extends Controller
 
         $allTasks = $tasks->merge($tasksForOthers); // Contains foo and bar.
        // $myTasks = \Auth::user()->myTasks();
-        return view('main')->with('data',$allTasks);
+        return view('home')->with('data',$allTasks);
+        */
     }
 
     /**

@@ -23,6 +23,28 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+         //
+        // for test case
+        $tasks = \Auth::user()->myTasks()->get();
+    //    return $tasks;
+        $shareableTask = \App\Shareable::all();
+        $filtered = $shareableTask->filter(function ($value, $key) {
+            if($value->share_user_id != \Auth::user()->id){
+                return $value;
+            }
+        });
+
+        $tasksForOthers = $filtered->map(function ($item, $key) {
+            return $item->task;
+        });
+        $allTasks = $tasksForOthers->merge($tasks); // Contains foo and bar.
+       // $myTasks = \Auth::user()->myTasks();
+       $allTasks = $allTasks->filter(function ($value, $key) {
+        return $value != null ;
+    });
+
+        return view('home')->with('data',$allTasks);
+
+      //  return view('home');
     }
 }

@@ -1,5 +1,7 @@
 <template>
   <div class="container">
+      <h1 class="display-4">To Do App</h1>
+
     <div class="row">
         <div class="col-sm-12">
              <!-- Button trigger modal -->

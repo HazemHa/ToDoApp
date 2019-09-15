@@ -46,7 +46,7 @@ class ShareableController extends Controller
             return response()->json($validator->messages(), 200);
         }
 
-        $user = \App\User::find(2);
+        $user =\Auth::user();
 
         $shareableTask = new Shareable;
         $shareableTask->task_type = 'App\Task';
