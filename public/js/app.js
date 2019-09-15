@@ -2026,6 +2026,7 @@ __webpack_require__.r(__webpack_exports__);
         check: false
       }).then(function (response) {
         var newTask = response.data;
+        console.log(self.arrayOfTask);
         self.arrayOfTask.push(newTask);
       })["catch"](function (e) {
         console.log(e.message);

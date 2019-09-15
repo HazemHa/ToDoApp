@@ -153,6 +153,7 @@ export default {
         })
         .then(response => {
             let newTask = response.data;
+            console.log(self.arrayOfTask);
             self.arrayOfTask.push(newTask);
         })
         .catch(e => {

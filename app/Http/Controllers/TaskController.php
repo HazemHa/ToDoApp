@@ -68,7 +68,7 @@ class TaskController extends Controller
         if ($validator->fails()) {
             return response()->json($validator->messages(), 200);
         }
-        $request->request->add(['user_id' => 2]); //add request
+        $request->request->add(['user_id' => \Auth::user()->id]); //add request
         $request->request->remove('check');
 
 
