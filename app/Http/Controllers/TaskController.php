@@ -23,6 +23,7 @@ class TaskController extends Controller
         //
         // for test case
         $tasks = \App\User::find(2)->myTasks()->get();
+    //    return $tasks;
         $shareableTask = \App\Shareable::all();
         $filtered = $shareableTask->filter(function ($value, $key) {
             if($value->share_user_id != \App\User::find(2)->id){
@@ -134,13 +135,12 @@ class TaskController extends Controller
     {
         //
         try {
-            return $this->createResponseMessage(true);
-          //  $record = Task::findOrFail($id);
-         //   $result =  Task::destroy($record->id);
+            $record = Task::findOrFail($id);
+            $result =  Task::destroy($record->id);
         } catch (ModelNotFoundException $e) {
             return ['error' => 'the Task ($id) not found '];
         }
 
-       // return $this->createResponseMessage($result);
+        return $this->createResponseMessage($result);
     }
 }

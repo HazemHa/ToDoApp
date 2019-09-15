@@ -39,7 +39,7 @@ class User extends Authenticatable
 
     public function myTasks()
     {
-        return $this->belongsTo('App\Task','id');
+        return $this->belongsTo('App\Task','id','user_id');
     }
     public function shareable()
     {
