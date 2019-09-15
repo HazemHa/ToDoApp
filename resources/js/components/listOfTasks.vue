@@ -111,7 +111,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" @click="updateTask()">Save</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal" @click="updateTask()">Save</button>
           </div>
         </div>
       </div>
@@ -159,6 +159,19 @@ export default {
         });
     },
     shareTask(id){
+       axios
+        .post(`${this.websiteURL}/Shareable`, {
+          task_id: id
+        })
+        .then(response => {
+            if(response.data.task_id){
+                  this.$toaster.info(response.data.task_id[0]);
+            }
+          this.showUpMessage(response);
+        })
+        .catch(e => {
+          this.errors.push(e);
+        });
 
     },
     updateTask() {

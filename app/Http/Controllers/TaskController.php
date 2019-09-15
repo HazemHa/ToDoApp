@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Task;
+use App\Shareable;
+
 use Validator;
 class TaskController extends Controller
 {
@@ -21,8 +23,21 @@ class TaskController extends Controller
         //
         // for test case
         $tasks = \App\User::find(2)->myTasks()->get();
+        $shareableTask = \App\Shareable::all();
+        $filtered = $shareableTask->filter(function ($value, $key) {
+            if($value->share_user_id != \App\User::find(2)->id){
+                return $value;
+            }
+        });
+
+        $tasksForOthers = $filtered->map(function ($item, $key) {
+            return $item->task;
+        });
+
+
+        $allTasks = $tasks->merge($tasksForOthers); // Contains foo and bar.
        // $myTasks = \Auth::user()->myTasks();
-        return view('main')->with('data',$tasks);
+        return view('main')->with('data',$allTasks);
     }
 
     /**

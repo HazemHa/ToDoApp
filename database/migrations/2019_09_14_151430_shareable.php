@@ -14,8 +14,10 @@ class Shareable extends Migration
     public function up()
     {
         Schema::create('shareable', function (Blueprint $table) {
+            $table->increments('id');
             $table->morphs('task');
             $table->integer('share_user_id')->unsigned();
+            $table->unique(['share_user_id','task_id']);
             $table->timestamps();
         });
     }

@@ -41,4 +41,8 @@ class User extends Authenticatable
     {
         return $this->belongsTo('App\Task','id');
     }
+    public function shareable()
+    {
+        return $this->morphMany('App\Shareable', 'taskable');
+    }
 }

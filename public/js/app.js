@@ -2031,16 +2031,30 @@ __webpack_require__.r(__webpack_exports__);
         _this.errors.push(e);
       });
     },
-    shareTask: function shareTask(id) {},
-    updateTask: function updateTask() {
+    shareTask: function shareTask(id) {
       var _this2 = this;
+
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("".concat(this.websiteURL, "/Shareable"), {
+        task_id: id
+      }).then(function (response) {
+        if (response.data.task_id) {
+          _this2.$toaster.info(response.data.task_id[0]);
+        }
+
+        _this2.showUpMessage(response);
+      })["catch"](function (e) {
+        _this2.errors.push(e);
+      });
+    },
+    updateTask: function updateTask() {
+      var _this3 = this;
 
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("".concat(this.websiteURL, "/task/").concat(this.editTask.id), {
         content: this.contentCurrentTask
       }).then(function (response) {
-        _this2.showUpMessage(response);
+        _this3.showUpMessage(response);
       })["catch"](function (e) {
-        _this2.errors.push(e);
+        _this3.errors.push(e);
       });
     },
     showUpMessage: function showUpMessage(response) {
@@ -2053,33 +2067,33 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     deleteTask: function deleteTask(id) {
-      var _this3 = this;
+      var _this4 = this;
 
       var self = this;
       var r = confirm("Are you sure to delete this task ");
 
       if (r == true) {
         axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"]("".concat(this.websiteURL, "/task/").concat(id)).then(function (response) {
-          _this3.showUpMessage(response);
+          _this4.showUpMessage(response);
 
           self.arrayOfTask.splice(self.arrayOfTask.findIndex(function (i) {
             return i.id === id;
           }), 1);
         })["catch"](function (e) {
-          _this3.errors.push(e);
+          _this4.errors.push(e);
         });
       }
     },
     isChange: function isChange(e, id, isDone) {
-      var _this4 = this;
+      var _this5 = this;
 
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("".concat(this.websiteURL, "/task/").concat(id), {
         isDone: e.target.checked,
         check: true
       }).then(function (response) {
-        _this4.showUpMessage(response);
+        _this5.showUpMessage(response);
       })["catch"](function (e) {
-        _this4.errors.push(e);
+        _this5.errors.push(e);
       });
     }
   }
@@ -38373,7 +38387,7 @@ var render = function() {
                   "button",
                   {
                     staticClass: "btn btn-primary",
-                    attrs: { type: "button" },
+                    attrs: { type: "button", "data-dismiss": "modal" },
                     on: {
                       click: function($event) {
                         return _vm.updateTask()
