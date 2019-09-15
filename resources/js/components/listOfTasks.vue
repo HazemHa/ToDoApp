@@ -17,18 +17,73 @@
             <th scope="row">{{task.id}}</th>
             <td>{{task.content}}</td>
             <td>
-              <button type="button" class="btn btn-success" @click="updateTask(task.id)">Edit</button>
+                <!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addNewTaskModal">
+  Add
+</button>
+              <button type="button" class="btn btn-success"  data-toggle="modal" data-target="#EditTaskModal" @click="setCurrentTask(task)">Edit</button>
             <button type="button" class="btn btn-danger" @click="deleteTask(task.id)">Delete</button>
             </td>
-            <td><input type="checkbox" v-model="checked" name="isDone" @change="isChange(task.id,task.isDone)"></td>
+            <td><input type="checkbox"  name="isDone" :checked="task.isDone" @change="isChange($event,task.id)"></td>
 
 
           </tr>
-{{checked}}
         </tbody>
       </table>
     </div>
   </div>
+
+  <!-- Modal -->
+<div class="modal fade" id="addNewTaskModal" tabindex="-1" role="dialog" aria-labelledby="addNewTaskModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addNewTaskModalLabel">Add Task</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <div class="form-group">
+    <label for="newTask">Task</label>
+        <input type="text" name="newTask" id="newTask" v-model="newTask" />
+  </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" @click="saveTask">Add</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+  <!-- Modal -->
+<div class="modal fade" id="EditTaskModal" tabindex="-1" role="dialog" aria-labelledby="EditTaskModal" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="EditTaskModal">Edit Task</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <div class="form-group">
+    <label for="editTask">Task</label>
+        <input type="text" name="editTask" id="editTask" v-model="contentCurrentTask" />
+  </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" @click="updateTask()" >Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 </div>
 </template>
 <script>
@@ -41,6 +96,9 @@ export default {
             arrayOfTask: null,
             websiteURL:"http://127.0.0.1:8000",
             checked:false,
+            newTask:"",
+            editTask:null,
+            contentCurrentTask:""
         }
     },
     created() {
@@ -54,10 +112,14 @@ export default {
 
     },
     methods: {
+        setCurrentTask(task){
+          this.editTask = task;
+          this.contentCurrentTask = task.content;
+        },
         saveTask(id){
 
   axios.post(`${this.websiteURL}/task`, {
-      content: this.postBody,
+      content: this.newTask ,
       check:false
     })
     .then(response => {})
@@ -66,9 +128,9 @@ export default {
     })
 
         },
-        updateTask(id){
-             axios.put(`${this.websiteURL}/task/${id}`, {
-      content: this.contentTask
+        updateTask(){
+             axios.put(`${this.websiteURL}/task/${this.editTask.id}`, {
+      content: this.contentCurrentTask
     })
     .then(response => {})
     .catch(e => {
@@ -101,9 +163,9 @@ export default {
 
 
         },
-        isChange(id,isDone){
+        isChange(e,id,isDone){
                 axios.put(`${this.websiteURL}/task/${id}`, {
-      isDone: this.checked,
+      isDone: e.target.checked,
       check:true
     })
     .then(response => {})

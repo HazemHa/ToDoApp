@@ -1873,6 +1873,61 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['tasks'],
@@ -1880,7 +1935,10 @@ __webpack_require__.r(__webpack_exports__);
     return {
       arrayOfTask: null,
       websiteURL: "http://127.0.0.1:8000",
-      checked: false
+      checked: false,
+      newTask: "",
+      editTask: null,
+      contentCurrentTask: ""
     };
   },
   created: function created() {
@@ -1890,21 +1948,25 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {},
   destroyed: function destroyed() {},
   methods: {
+    setCurrentTask: function setCurrentTask(task) {
+      this.editTask = task;
+      this.contentCurrentTask = task.content;
+    },
     saveTask: function saveTask(id) {
       var _this = this;
 
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("".concat(this.websiteURL, "/task"), {
-        content: this.postBody,
+        content: this.newTask,
         check: false
       }).then(function (response) {})["catch"](function (e) {
         _this.errors.push(e);
       });
     },
-    updateTask: function updateTask(id) {
+    updateTask: function updateTask() {
       var _this2 = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("".concat(this.websiteURL, "/task/").concat(id), {
-        content: this.contentTask
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("".concat(this.websiteURL, "/task/").concat(this.editTask.id), {
+        content: this.contentCurrentTask
       }).then(function (response) {})["catch"](function (e) {
         _this2.errors.push(e);
       });
@@ -1926,11 +1988,11 @@ __webpack_require__.r(__webpack_exports__);
         _this4.errors.push(e);
       });
     },
-    isChange: function isChange(id, isDone) {
+    isChange: function isChange(e, id, isDone) {
       var _this5 = this;
 
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("".concat(this.websiteURL, "/task/").concat(id), {
-        isDone: this.checked,
+        isDone: e.target.checked,
         check: true
       }).then(function (response) {})["catch"](function (e) {
         _this5.errors.push(e);
@@ -20294,98 +20356,229 @@ var render = function() {
           _vm._v(" "),
           _c(
             "tbody",
-            [
-              _vm._l(_vm.arrayOfTask, function(task) {
-                return _c("tr", { key: task.id }, [
-                  _c("th", { attrs: { scope: "row" } }, [
-                    _vm._v(_vm._s(task.id))
-                  ]),
+            _vm._l(_vm.arrayOfTask, function(task) {
+              return _c("tr", { key: task.id }, [
+                _c("th", { attrs: { scope: "row" } }, [
+                  _vm._v(_vm._s(task.id))
+                ]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(task.content))]),
+                _vm._v(" "),
+                _c("td", [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-primary",
+                      attrs: {
+                        type: "button",
+                        "data-toggle": "modal",
+                        "data-target": "#addNewTaskModal"
+                      }
+                    },
+                    [_vm._v("\n  Add\n")]
+                  ),
                   _vm._v(" "),
-                  _c("td", [_vm._v(_vm._s(task.content))]),
-                  _vm._v(" "),
-                  _c("td", [
-                    _c(
-                      "button",
-                      {
-                        staticClass: "btn btn-success",
-                        attrs: { type: "button" },
-                        on: {
-                          click: function($event) {
-                            return _vm.updateTask(task.id)
-                          }
-                        }
-                      },
-                      [_vm._v("Edit")]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "button",
-                      {
-                        staticClass: "btn btn-danger",
-                        attrs: { type: "button" },
-                        on: {
-                          click: function($event) {
-                            return _vm.deleteTask(task.id)
-                          }
-                        }
-                      },
-                      [_vm._v("Delete")]
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("td", [
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.checked,
-                          expression: "checked"
-                        }
-                      ],
-                      attrs: { type: "checkbox", name: "isDone" },
-                      domProps: {
-                        checked: Array.isArray(_vm.checked)
-                          ? _vm._i(_vm.checked, null) > -1
-                          : _vm.checked
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-success",
+                      attrs: {
+                        type: "button",
+                        "data-toggle": "modal",
+                        "data-target": "#EditTaskModal"
                       },
                       on: {
-                        change: [
-                          function($event) {
-                            var $$a = _vm.checked,
-                              $$el = $event.target,
-                              $$c = $$el.checked ? true : false
-                            if (Array.isArray($$a)) {
-                              var $$v = null,
-                                $$i = _vm._i($$a, $$v)
-                              if ($$el.checked) {
-                                $$i < 0 && (_vm.checked = $$a.concat([$$v]))
-                              } else {
-                                $$i > -1 &&
-                                  (_vm.checked = $$a
-                                    .slice(0, $$i)
-                                    .concat($$a.slice($$i + 1)))
-                              }
-                            } else {
-                              _vm.checked = $$c
-                            }
-                          },
-                          function($event) {
-                            return _vm.isChange(task.id, task.isDone)
-                          }
-                        ]
+                        click: function($event) {
+                          return _vm.setCurrentTask(task)
+                        }
                       }
-                    })
-                  ])
+                    },
+                    [_vm._v("Edit")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-danger",
+                      attrs: { type: "button" },
+                      on: {
+                        click: function($event) {
+                          return _vm.deleteTask(task.id)
+                        }
+                      }
+                    },
+                    [_vm._v("Delete")]
+                  )
+                ]),
+                _vm._v(" "),
+                _c("td", [
+                  _c("input", {
+                    attrs: { type: "checkbox", name: "isDone" },
+                    domProps: { checked: task.isDone },
+                    on: {
+                      change: function($event) {
+                        return _vm.isChange($event, task.id)
+                      }
+                    }
+                  })
                 ])
-              }),
-              _vm._v("\n" + _vm._s(_vm.checked) + "\n        ")
-            ],
-            2
+              ])
+            }),
+            0
           )
         ])
       ])
-    ])
+    ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          id: "addNewTaskModal",
+          tabindex: "-1",
+          role: "dialog",
+          "aria-labelledby": "addNewTaskModalLabel",
+          "aria-hidden": "true"
+        }
+      },
+      [
+        _c(
+          "div",
+          { staticClass: "modal-dialog", attrs: { role: "document" } },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _vm._m(1),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-body" }, [
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "newTask" } }, [_vm._v("Task")]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.newTask,
+                        expression: "newTask"
+                      }
+                    ],
+                    attrs: { type: "text", name: "newTask", id: "newTask" },
+                    domProps: { value: _vm.newTask },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.newTask = $event.target.value
+                      }
+                    }
+                  })
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-footer" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-secondary",
+                    attrs: { type: "button", "data-dismiss": "modal" }
+                  },
+                  [_vm._v("Close")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-primary",
+                    attrs: { type: "button" },
+                    on: { click: _vm.saveTask }
+                  },
+                  [_vm._v("Add")]
+                )
+              ])
+            ])
+          ]
+        )
+      ]
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          id: "EditTaskModal",
+          tabindex: "-1",
+          role: "dialog",
+          "aria-labelledby": "EditTaskModal",
+          "aria-hidden": "true"
+        }
+      },
+      [
+        _c(
+          "div",
+          { staticClass: "modal-dialog", attrs: { role: "document" } },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _vm._m(2),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-body" }, [
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "editTask" } }, [_vm._v("Task")]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.contentCurrentTask,
+                        expression: "contentCurrentTask"
+                      }
+                    ],
+                    attrs: { type: "text", name: "editTask", id: "editTask" },
+                    domProps: { value: _vm.contentCurrentTask },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.contentCurrentTask = $event.target.value
+                      }
+                    }
+                  })
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-footer" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-secondary",
+                    attrs: { type: "button", "data-dismiss": "modal" }
+                  },
+                  [_vm._v("Close")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-primary",
+                    attrs: { type: "button" },
+                    on: {
+                      click: function($event) {
+                        return _vm.updateTask()
+                      }
+                    }
+                  },
+                  [_vm._v("Save")]
+                )
+              ])
+            ])
+          ]
+        )
+      ]
+    )
   ])
 }
 var staticRenderFns = [
@@ -20403,6 +20596,54 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", { attrs: { scope: "col" } }, [_vm._v("isDone")])
       ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c(
+        "h5",
+        { staticClass: "modal-title", attrs: { id: "addNewTaskModalLabel" } },
+        [_vm._v("Add Task")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c("h5", { staticClass: "modal-title", attrs: { id: "EditTaskModal" } }, [
+        _vm._v("Edit Task")
+      ]),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
     ])
   }
 ]

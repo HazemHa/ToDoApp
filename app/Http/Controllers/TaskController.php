@@ -91,8 +91,6 @@ class TaskController extends Controller
         if($request->check){
             $UpdatedRecord = Task::find($id);
             $result = $UpdatedRecord->update($request->all());
-        return response()->json(['done'=> $result,'data'=>$request->all()],200);
-
         return $this->createResponseMessage($result);
         }
         //
@@ -102,17 +100,9 @@ class TaskController extends Controller
         if ($validator->fails()) {
             return response()->json($validator->messages(), 200);
         }
-
-
         $UpdatedRecord = Task::find($id);
-        $UpdatedRecord->content = $request->content;
-        $UpdatedRecord->isDone = $request->isDone;
-
-
         $result = $UpdatedRecord->update($request->all());
-        $result = $UpdatedRecord->save();
-
-        return $this->createResponseMessage($result);
+    return $this->createResponseMessage($result);
 
     }
 
