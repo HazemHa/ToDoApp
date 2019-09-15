@@ -1,6 +1,15 @@
 <template>
   <div class="container">
     <div class="row">
+        <div class="col-sm-12">
+             <!-- Button trigger modal -->
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  data-toggle="modal"
+                  data-target="#addNewTaskModal"
+                >Add new Task</button>
+        </div>
       <div class="col-12">
         <table class="table table-bordered">
           <thead>
@@ -17,13 +26,7 @@
               <th scope="row">{{task.id}}</th>
               <td>{{task.content}}</td>
               <td>
-                <!-- Button trigger modal -->
-                <button
-                  type="button"
-                  class="btn btn-primary"
-                  data-toggle="modal"
-                  data-target="#addNewTaskModal"
-                >Add</button>
+
                 <button
                   type="button"
                   class="btn btn-success"
@@ -42,7 +45,7 @@
                 />
               </td>
               <td>
-                 <button type="button" class="btn btn-info">Share</button>
+                 <button type="button" class="btn btn-info" @click="shareTask(task.id)">Share</button>
 
 
               </td>
@@ -77,7 +80,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" @click="saveTask">Add</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal" @click="saveTask">Add</button>
           </div>
         </div>
       </div>
@@ -127,32 +130,36 @@ export default {
       checked: false,
       newTask: "",
       editTask: null,
-      contentCurrentTask: ""
+      contentCurrentTask: "",
+      errors:[]
     };
   },
   created() {
     this.arrayOfTask = JSON.parse(this.tasks);
-    console.log(this.arrayOfTask);
   },
-  mounted() {},
-  destroyed() {},
   methods: {
     setCurrentTask(task) {
       this.editTask = task;
       this.contentCurrentTask = task.content;
     },
-    saveTask(id) {
+    saveTask() {
+        let self = this;
       axios
         .post(`${this.websiteURL}/task`, {
           content: this.newTask,
           check: false
         })
         .then(response => {
-          console.log(response);
+            let newTask = response.data;
+            self.arrayOfTask.push(newTask);
         })
         .catch(e => {
+            console.log(e.message);
           this.errors.push(e);
         });
+    },
+    shareTask(id){
+
     },
     updateTask() {
       axios
@@ -175,25 +182,27 @@ export default {
       }
     },
     deleteTask(id) {
-      axios
+        let self = this;
+
+        var r = confirm("Are you sure to delete this task ");
+if (r == true) {
+ axios
         .delete(`${this.websiteURL}/task/${id}`)
         .then(response => {
+
           this.showUpMessage(response);
+
+          self.arrayOfTask.splice(self.arrayOfTask.findIndex(function(i){
+    return i.id === id;
+}), 1);
+
         })
         .catch(e => {
           this.errors.push(e);
         });
-    },
-    refreshTasks() {
-      axios
-        .get(`${this.websiteURL}/task`)
-        .then(response => {
-          // JSON responses are automatically parsed.
-          this.posts = response.data;
-        })
-        .catch(e => {
-          this.errors.push(e);
-        });
+}
+
+
     },
     isChange(e, id, isDone) {
       axios

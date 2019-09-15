@@ -50,11 +50,14 @@ class TaskController extends Controller
         if ($validator->fails()) {
             return response()->json($validator->messages(), 200);
         }
+        $request->request->add(['user_id' => 2]); //add request
+        $request->request->remove('check');
 
-        $newRecord = Task::create($request->all());
+
+        $newRecord = Task::firstOrCreate($request->all());
 
 
-        return $this->createResponseMessage($newRecord);
+        return $newRecord;
     }
 
     /**
@@ -116,7 +119,7 @@ class TaskController extends Controller
     {
         //
         try {
-            return $this->createResponseMessage(false);
+            return $this->createResponseMessage(true);
           //  $record = Task::findOrFail($id);
          //   $result =  Task::destroy($record->id);
         } catch (ModelNotFoundException $e) {

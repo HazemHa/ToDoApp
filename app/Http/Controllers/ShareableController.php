@@ -77,39 +77,6 @@ class ShareableController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-
-        $validator = Validator::make($request->all(), [
-            'note' => 'required',
-            'from' => 'required',
-            'shareable_user_id' => 'required'
-        ]);
-        if ($validator->fails()) {
-            return response()->json($validator->messages(), 200);
-        }
-
-
-        $UpdatedRecord = Shareable::find($id);
-        $UpdatedRecord->note = $request->note;
-        $UpdatedRecord->from = $request->from;
-        $UpdatedRecord->shareable_user_id = $request->shareable_user_id;
-
-
-        $result = $UpdatedRecord->update($request->all());
-        $result = $UpdatedRecord->save();
-
-        return $this->createResponseMessage($result);
-    }
-
-    /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id

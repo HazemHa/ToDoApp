@@ -9,4 +9,10 @@ class Shareable extends Model
     protected $table = 'shareable';
     protected $primaryKey  = 'id';
     protected $fillable = ['task', 'from', 'shareable_user_id'];
+
+    public function taskable()
+    {
+        return $this->morphTo();
+    }
+
 }

@@ -1990,6 +1990,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["tasks"],
@@ -2000,32 +2003,35 @@ __webpack_require__.r(__webpack_exports__);
       checked: false,
       newTask: "",
       editTask: null,
-      contentCurrentTask: ""
+      contentCurrentTask: "",
+      errors: []
     };
   },
   created: function created() {
     this.arrayOfTask = JSON.parse(this.tasks);
-    console.log(this.arrayOfTask);
   },
-  mounted: function mounted() {},
-  destroyed: function destroyed() {},
   methods: {
     setCurrentTask: function setCurrentTask(task) {
       this.editTask = task;
       this.contentCurrentTask = task.content;
     },
-    saveTask: function saveTask(id) {
+    saveTask: function saveTask() {
       var _this = this;
 
+      var self = this;
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("".concat(this.websiteURL, "/task"), {
         content: this.newTask,
         check: false
       }).then(function (response) {
-        console.log(response);
+        var newTask = response.data;
+        self.arrayOfTask.push(newTask);
       })["catch"](function (e) {
+        console.log(e.message);
+
         _this.errors.push(e);
       });
     },
+    shareTask: function shareTask(id) {},
     updateTask: function updateTask() {
       var _this2 = this;
 
@@ -2049,32 +2055,31 @@ __webpack_require__.r(__webpack_exports__);
     deleteTask: function deleteTask(id) {
       var _this3 = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"]("".concat(this.websiteURL, "/task/").concat(id)).then(function (response) {
-        _this3.showUpMessage(response);
-      })["catch"](function (e) {
-        _this3.errors.push(e);
-      });
-    },
-    refreshTasks: function refreshTasks() {
-      var _this4 = this;
+      var self = this;
+      var r = confirm("Are you sure to delete this task ");
 
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("".concat(this.websiteURL, "/task")).then(function (response) {
-        // JSON responses are automatically parsed.
-        _this4.posts = response.data;
-      })["catch"](function (e) {
-        _this4.errors.push(e);
-      });
+      if (r == true) {
+        axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"]("".concat(this.websiteURL, "/task/").concat(id)).then(function (response) {
+          _this3.showUpMessage(response);
+
+          self.arrayOfTask.splice(self.arrayOfTask.findIndex(function (i) {
+            return i.id === id;
+          }), 1);
+        })["catch"](function (e) {
+          _this3.errors.push(e);
+        });
+      }
     },
     isChange: function isChange(e, id, isDone) {
-      var _this5 = this;
+      var _this4 = this;
 
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("".concat(this.websiteURL, "/task/").concat(id), {
         isDone: e.target.checked,
         check: true
       }).then(function (response) {
-        _this5.showUpMessage(response);
+        _this4.showUpMessage(response);
       })["catch"](function (e) {
-        _this5.errors.push(e);
+        _this4.errors.push(e);
       });
     }
   }
@@ -38149,9 +38154,11 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container" }, [
     _c("div", { staticClass: "row" }, [
+      _vm._m(0),
+      _vm._v(" "),
       _c("div", { staticClass: "col-12" }, [
         _c("table", { staticClass: "table table-bordered" }, [
-          _vm._m(0),
+          _vm._m(1),
           _vm._v(" "),
           _c(
             "tbody",
@@ -38164,19 +38171,6 @@ var render = function() {
                 _c("td", [_vm._v(_vm._s(task.content))]),
                 _vm._v(" "),
                 _c("td", [
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-primary",
-                      attrs: {
-                        type: "button",
-                        "data-toggle": "modal",
-                        "data-target": "#addNewTaskModal"
-                      }
-                    },
-                    [_vm._v("Add")]
-                  ),
-                  _vm._v(" "),
                   _c(
                     "button",
                     {
@@ -38222,7 +38216,21 @@ var render = function() {
                   })
                 ]),
                 _vm._v(" "),
-                _vm._m(1, true)
+                _c("td", [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-info",
+                      attrs: { type: "button" },
+                      on: {
+                        click: function($event) {
+                          return _vm.shareTask(task.id)
+                        }
+                      }
+                    },
+                    [_vm._v("Share")]
+                  )
+                ])
               ])
             }),
             0
@@ -38292,7 +38300,7 @@ var render = function() {
                   "button",
                   {
                     staticClass: "btn btn-primary",
-                    attrs: { type: "button" },
+                    attrs: { type: "button", "data-dismiss": "modal" },
                     on: { click: _vm.saveTask }
                   },
                   [_vm._v("Add")]
@@ -38387,6 +38395,25 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-sm-12" }, [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-primary",
+          attrs: {
+            type: "button",
+            "data-toggle": "modal",
+            "data-target": "#addNewTaskModal"
+          }
+        },
+        [_vm._v("Add new Task")]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
     return _c("thead", [
       _c("tr", [
         _c("th", { attrs: { scope: "col" } }, [_vm._v("Number")]),
@@ -38399,17 +38426,6 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", { attrs: { scope: "col" } }, [_vm._v("Share Task")])
       ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("td", [
-      _c("button", { staticClass: "btn btn-info", attrs: { type: "button" } }, [
-        _vm._v("Share")
-      ]),
-      _vm._v("\n\n              />\n            ")
     ])
   },
   function() {
