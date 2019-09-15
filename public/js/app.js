@@ -2049,10 +2049,15 @@ __webpack_require__.r(__webpack_exports__);
     updateTask: function updateTask() {
       var _this3 = this;
 
+      var self = this;
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("".concat(this.websiteURL, "/task/").concat(this.editTask.id), {
         content: this.contentCurrentTask
       }).then(function (response) {
+        var Index = self.arrayOfTask.indexOf(_this3.editTask);
+
         _this3.showUpMessage(response);
+
+        self.arrayOfTask[Index].content = _this3.contentCurrentTask;
       })["catch"](function (e) {
         _this3.errors.push(e);
       });

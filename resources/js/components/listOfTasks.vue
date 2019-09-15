@@ -175,12 +175,16 @@ export default {
 
     },
     updateTask() {
+        let self = this;
+
       axios
         .put(`${this.websiteURL}/task/${this.editTask.id}`, {
           content: this.contentCurrentTask
         })
         .then(response => {
+            var Index = self.arrayOfTask.indexOf(this.editTask);
           this.showUpMessage(response);
+                      self.arrayOfTask[Index].content = this.contentCurrentTask;
         })
         .catch(e => {
           this.errors.push(e);
